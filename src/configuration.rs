@@ -124,7 +124,7 @@ impl<'a> Configuration<'a> {
     pub fn battle<T: Strategy, U: Strategy>(&mut self, mut player_one: T, mut player_two: U) {
         while !self.game_over() {
             println!(
-                "{} player's turn (he is losing by {} before playing)",
+                "{} player's turn ({})",
                 ["red", "blue"][self.current_player as usize],
                 self.value()
             );
@@ -142,14 +142,13 @@ impl<'a> Configuration<'a> {
             }
         }
 
-        let value = self.blobs[0].len() - self.blobs[1].len();
-        match value {
+        match self.value() {
             x if x > 0 => println!("RED ({}) wins over BLUE ({})!", player_one, player_two),
             x if x < 0 => println!("BLUE ({}) wins over RED ({})!", player_two, player_one),
             _ => println!("DRAW!"),
         }
         println!("{}", self);
-        println!("GAME OVER (red value of {})", value);
+        println!("GAME OVER (value of {})", self.value());
     }
 
     /// Return true if no empty space remains or someone died.
@@ -163,17 +162,16 @@ impl<'a> Configuration<'a> {
 
     /// Iterate on all possible jumps for given player.
     fn jumps<'b>(&'b self) -> impl 'b + Iterator<Item = Movement> {
-        Itertools::flatten(
-            self.blobs[self.current_player as usize]
-                .positions()
-                .map(move |start| {
-                    // look at all distance 2 neighbours
-                    self.board.individual_neighbours[1][start as usize]
-                        .iter()
-                        .filter(move |&end| self.free_position_at(*end))
-                        .map(move |end| Movement::Jump(start, *end))
-                }),
-        )
+        self.blobs[self.current_player as usize]
+            .positions()
+            .map(move |start| {
+                // look at all distance 2 neighbours
+                self.board.individual_neighbours[1][start as usize]
+                    .iter()
+                    .filter(move |&end| self.free_position_at(*end))
+                    .map(move |end| Movement::Jump(start, *end))
+            })
+            .flatten()
     }
 
     /// Iterate on all possible duplications for given player.

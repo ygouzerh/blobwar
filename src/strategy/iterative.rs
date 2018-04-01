@@ -52,11 +52,11 @@ impl Strategy for IterativeDeepening {
 
 impl IterativeDeepening {
     /// New iterative deepening strategy with given algorithm.
-    /// default time is 2 seconds.
+    /// default time is 0.5 second.
     pub fn new(strategy: IterativeStrategy) -> IterativeDeepening {
         IterativeDeepening {
             strategy,
-            duration: 2000,
+            duration: 500,
         }
     }
 
