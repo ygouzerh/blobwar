@@ -9,6 +9,7 @@ use blobwar::board::Board;
 use std::io::{BufRead, BufReader};
 use std::net::TcpStream;
 use std::env::args;
+use std::io::Write;
 
 fn main() {
     let address = args().nth(1).expect("missing machine name or IP address");
@@ -26,5 +27,6 @@ fn main() {
         let game = Configuration::deserialize(&line, &board);
         let next_move = strategy.compute_next_move(&game);
         serde_json::to_writer(&mut sending, &next_move).expect("sending back movement failed");
+        sending.write(b"\n").expect("newline failed");
     }
 }
