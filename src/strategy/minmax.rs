@@ -7,9 +7,46 @@ use shmem::AtomicMove;
 /// Min-Max algorithm with a given recursion depth.
 pub struct MinMax(pub u8);
 
+fn minmax(state: &Configuration, depth: i8, is_the_player: bool) -> (Option<Movement>, i8) {
+    // We stop at the end of the possible move, or at the terminal leaves
+    if state.movements().next().is_some() && depth > 0 {
+        let mut best_movement: Option<Movement> = None;
+        // For this game, the player want to minimize it
+        if is_the_player {
+            let mut best_value: i8 = 127;
+            // For each move, we take the move which minimize the value
+            for mov in state.movements() {
+                let config = state.play(&mov);
+                let (_, value) = minmax(&config, depth - 1, false);
+                if value < best_value {
+                    best_value = value;
+                    best_movement = Some(mov);
+                }
+            }
+            return (best_movement, best_value);
+        // The other player
+        } else {
+            let mut best_value: i8 = -127;
+            // For each move, we take the move which maximize the value
+            for mov in state.movements() {
+                let (_, value) = minmax(&state.play(&mov), depth - 1, true);
+                if value > best_value {
+                    best_value = value;
+                    best_movement = Some(mov);
+                }
+            }
+            return (best_movement, best_value);
+        }
+    } else {
+        // TODO : Dirty solution, work only with depth = 3 and red player I think
+        return (None, -state.value());
+    }
+}
+
 impl Strategy for MinMax {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
-        unimplemented!("TODO: implementer min max")
+        let (best_movement, _) = minmax(state, 3, true);
+        best_movement
     }
 }
 
