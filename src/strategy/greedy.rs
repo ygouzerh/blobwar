@@ -1,8 +1,13 @@
 //! Dumb greedy algorithm.
+
 use std::fmt;
 use super::Strategy;
 use configuration::{Configuration, Movement};
 
+
+extern crate rand;
+
+use self::rand::{Rng, thread_rng};
 /// Dumb algorithm.
 /// Amongst all possible movements return the one which yields the configuration with the best
 /// immediate value.
@@ -16,10 +21,15 @@ impl fmt::Display for Greedy {
 
 impl Strategy for Greedy {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
+        let mut rng = thread_rng();
+
         if state.movements().next().is_some() {
             // Each player want to minimize the value
             let mut optimal_value: i8 = 127;
             let mut optimal_mouvement = state.movements().next();
+            let mut history_mouvement = Vec::new();
+
+
             // For each mouv we play it and we observe the value of the game
             for mov in state.movements() {
                 // Play a game will inverse the players, so skip_play is like a second inversion
@@ -27,9 +37,17 @@ impl Strategy for Greedy {
                 // If we find a better mouve, we update it
                 if new_value < optimal_value {
                     optimal_mouvement = Some(mov);
+                    history_mouvement.push(optimal_mouvement);
                     optimal_value = new_value;
                 }
             }
+            for i in history_mouvement.iter(){
+                println!(">>{:?}", i );
+            }
+
+            optimal_mouvement=history_mouvement[rng.gen_range(0,history_mouvement.len())];
+            println!("Choise : {:?}", optimal_mouvement);
+
             // We return the best movement
             return optimal_mouvement;
         } else {
