@@ -31,6 +31,7 @@ impl Strategy for Greedy {
                 }
             }
             // We return the best movement
+            // return optimal_mouvement;
             return optimal_mouvement;
         } else {
             return None;
