@@ -1,4 +1,5 @@
 //! We provide here structs for all possible kinds of players and AI.
+extern crate rayon;
 use std::fmt;
 use configuration::{Configuration, Movement};
 
