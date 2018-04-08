@@ -8,14 +8,14 @@ use shmem::AtomicMove;
 pub struct MinMax(pub u8);
 
 // It's more a negamax here than a min max algorithm, due to the inversion done by state.play()
-fn minmax(state: &Configuration, depth: i8, is_the_player: bool) -> (Option<Movement>, i8) {
+fn minmax(state: &Configuration, depth: i8) -> (Option<Movement>, i8) {
     // Test if we have a movement to perform or if we aren't at the leaves
     if state.movements().next().is_some() && depth > 0 {
         let mut best_value: i8 = 127;
         let mut best_movement: Option<Movement> = None;
         // For each possible movements we test he possible combinations
         for mov in state.movements() {
-            let (_, v_read) = minmax(&state.play(&mov), depth - 1, is_the_player);
+            let (_, v_read) = minmax(&state.play(&mov), depth - 1);
             // We invert the value at each turn because the second level will give the value
             // for himslef
             let value = -v_read;
@@ -39,7 +39,7 @@ impl Strategy for MinMax {
             state.current_player,
             state.value()
         );
-        let (best_movement, _) = minmax(state, 2, state.current_player);
+        let (best_movement, _) = minmax(state, 2);
         best_movement
     }
 }

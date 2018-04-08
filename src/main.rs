@@ -1,4 +1,5 @@
 extern crate blobwar;
+extern crate rayon;
 //use blobwar::board::Board;
 use blobwar::configuration::Configuration;
 use blobwar::strategy::{Greedy, Human, MinMax};
