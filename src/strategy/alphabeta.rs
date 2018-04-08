@@ -26,8 +26,44 @@ impl fmt::Display for AlphaBeta {
     }
 }
 
+// It's like the minmax algorithm (negamax), but we keep a range of value
+// so we are able to follow only interesting paths
+// TODO : Write it in rust and parallelize it
+fn alphabeta(state: &Configuration, depth: u8, alpha: i8, mut beta: i8) -> (Option<Movement>, i8) {
+    // Test if we have a movement to perform or if we aren't at the leaves
+    if state.movements().next().is_some() && depth > 0 {
+        let mut best_value = 127;
+        let mut best_movement: Option<Movement> = None;
+        for mov in state.movements() {
+            // We keep give at the opponent the contrary of our game
+            // So we invert the alpha beta
+            let (_, v_read) = alphabeta(&state.play(&mov), depth - 1, -beta, -alpha);
+            // And he give us his version of the score, so we need to inverst it
+            let value = -v_read;
+            if value < best_value {
+                best_value = value;
+                best_movement = Some(mov);
+                // If the value is better for us, we keep it
+                if best_value < beta {
+                    beta = best_value;
+                }
+                // In the case where the better value is worse than the minimum
+                // allowed, we cut this node and don't explore it
+                if value <= alpha {
+                    break;
+                }
+            }
+        }
+        return (best_movement, best_value);
+    } else {
+        // The last level return the value of th egame
+        return (None, state.value());
+    }
+}
+
 impl Strategy for AlphaBeta {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
-        unimplemented!("implementer alpha beta")
+        let (best_movement, _value) = alphabeta(state, self.0, -127, 127);
+        best_movement
     }
 }
