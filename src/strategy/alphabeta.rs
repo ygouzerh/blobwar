@@ -29,7 +29,7 @@ impl fmt::Display for AlphaBeta {
 // It's like the minmax algorithm (negamax), but we keep a range of value
 // so we are able to follow only interesting paths
 // TODO : Write it in rust and parallelize it
-fn alphabeta(state: &Configuration, depth: i8, alpha: i8, mut beta: i8) -> (Option<Movement>, i8) {
+fn alphabeta(state: &Configuration, depth: u8, alpha: i8, mut beta: i8) -> (Option<Movement>, i8) {
     // Test if we have a movement to perform or if we aren't at the leaves
     if state.movements().next().is_some() && depth > 0 {
         let mut best_value = 127;
@@ -63,7 +63,7 @@ fn alphabeta(state: &Configuration, depth: i8, alpha: i8, mut beta: i8) -> (Opti
 
 impl Strategy for AlphaBeta {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
-        let (best_movement, _value) = alphabeta(state, 4, -127, 127);
+        let (best_movement, _value) = alphabeta(state, self.0, -127, 127);
         best_movement
     }
 }
