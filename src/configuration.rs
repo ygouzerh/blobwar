@@ -123,12 +123,8 @@ impl<'a> Configuration<'a> {
     /// Play a match between the given players starting from current `Configuration`.
     pub fn battle<T: Strategy, U: Strategy>(&mut self, mut player_one: T, mut player_two: U) {
         while !self.game_over() {
-            println!(
-                "{} player's turn ({})",
-                ["red", "blue"][self.current_player as usize],
-                self.value()
-            );
-            println!("{}", self);
+            //println!( "{} player's turn ({})", ["red", "blue"][self.current_player as usize], self.value() );
+            //println!("{}", self);
             let play_attempt = if self.current_player {
                 player_two.compute_next_move(self)
             } else {
@@ -143,12 +139,12 @@ impl<'a> Configuration<'a> {
         }
 
         match self.value() {
-            x if x > 0 => println!("RED ({}) wins over BLUE ({})!", player_one, player_two),
-            x if x < 0 => println!("BLUE ({}) wins over RED ({})!", player_two, player_one),
+            x if x > 0 => println!("RED\tBLUE"),
+            x if x < 0 => println!("BLUE\tRED"),
             _ => println!("DRAW!"),
         }
-        println!("{}", self);
-        println!("GAME OVER (value of {})", self.value());
+        //println!("{}", self);
+        println!("{}", self.value());
     }
 
     /// Return true if no empty space remains or someone died.
