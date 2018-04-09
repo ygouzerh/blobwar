@@ -1,7 +1,7 @@
 extern crate blobwar;
 use blobwar::configuration::Configuration;
 use blobwar::board::Board;
-use blobwar::strategy::{AlphaBeta, NetworkPlayer};
+use blobwar::strategy::{AlphaBeta, IterativeDeepening, IterativeStrategy, NetworkPlayer};
 
 use std::net::TcpListener;
 use std::env::args;
@@ -17,5 +17,8 @@ fn main() {
     // create board and start game
     let board = Board::load(map_name).expect("failed loading map");
     let mut game = Configuration::new(&board);
-    game.battle(AlphaBeta(6), players.next().unwrap());
+    game.battle(
+        IterativeDeepening::new(IterativeStrategy::AlphaBeta),
+        players.next().unwrap(),
+    );
 }
