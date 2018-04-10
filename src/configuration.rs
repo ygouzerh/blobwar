@@ -167,14 +167,6 @@ impl<'a> Configuration<'a> {
                 self.current_player = !self.current_player;
             }
         }
-
-        let value = self.blobs[0].len() - self.blobs[1].len();
-        match value {
-            x if x > 0 => println!("RED ({}) wins over BLUE ({})!", player_one, player_two),
-            x if x < 0 => println!("BLUE ({}) wins over RED ({})!", player_two, player_one),
-            _ => println!("DRAW!"),
-        }
-        println!("GAME OVER (red value of {})", value);
     }
 
     /// Return true if no empty space remains or someone died.
