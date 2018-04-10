@@ -20,10 +20,24 @@ fn launch_battle_greedy_greedy() {
 }
 
 /// Function that launch AlphaBeta on a great depth with only itself
-fn launch_solo_alpha_beta() {
+fn launch_solo_alpha_beta_simple() {
     let board = Default::default();
     let game = Configuration::new(&board);
-    AlphaBeta(8).compute_next_move(&game);
+    AlphaBeta(8).compute_next_move_simple(&game);
+}
+
+/// Function that launch AlphaBeta with memoization
+fn launch_solo_alphabeta_memoization() {
+    let board = Default::default();
+    let game = Configuration::new(&board);
+    AlphaBeta(8).compute_next_move_memoization(&game);
+}
+
+/// Function that launch AlphaBeta with memoization and sort
+fn launch_solo_alphabeta_sorted() {
+    let board = Default::default();
+    let game = Configuration::new(&board);
+    AlphaBeta(8).compute_next_move_sorted(&game);
 }
 
 /// Function that launch MinMax // on a great depth with only itself
@@ -40,13 +54,6 @@ fn launch_solo_minmax_sequential() {
     MinMax(5).compute_next_move_sequential(&game);
 }
 
-/// Function that launch AlphaBeta with memoization
-fn launch_solo_alphabeta_memoization() {
-    let board = Default::default();
-    let game = Configuration::new(&board);
-    AlphaBeta(8).compute_next_move_memoization(&game);
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -57,11 +64,6 @@ mod tests {
     //     b.iter(|| launch_battle_greedy_greedy());
     // }
     //
-    #[bench]
-    fn alphabeta_solo(b: &mut Bencher) {
-        b.iter(|| launch_solo_alpha_beta());
-    }
-
     // #[bench]
     // fn minmax_sequential_solo(b: &mut Bencher) {
     //     b.iter(|| launch_solo_minmax_sequential());
@@ -71,10 +73,19 @@ mod tests {
     // fn minmax_parallel_solo(b: &mut Bencher) {
     //     b.iter(|| launch_solo_minmax_parallel());
     // }
+    //
+    // #[bench]
+    // fn alphabeta_solo(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_alpha_beta_simple());
+    // }
 
     #[bench]
     fn alphabeta_memoization_solo(b: &mut Bencher) {
         b.iter(|| launch_solo_alphabeta_memoization());
+    }
+    #[bench]
+    fn alphabeta_memoization_sorted(b: &mut Bencher) {
+        b.iter(|| launch_solo_alphabeta_sorted());
     }
 
 }
