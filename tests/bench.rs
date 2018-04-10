@@ -34,10 +34,10 @@ fn launch_solo_alphabeta_memoization() {
 }
 
 /// Function that launch AlphaBeta with memoization and sort
-fn launch_solo_alphabeta_sorted() {
+fn launch_solo_alphabeta_sorted(depth: u8) {
     let board = Default::default();
     let game = Configuration::new(&board);
-    AlphaBeta(8).compute_next_move_sorted(&game);
+    AlphaBeta(depth).compute_next_move_sorted(&game);
 }
 
 /// Function that launch MinMax // on a great depth with only itself
@@ -52,6 +52,12 @@ fn launch_solo_minmax_sequential() {
     let board = Default::default();
     let game = Configuration::new(&board);
     MinMax(5).compute_next_move_sequential(&game);
+}
+
+fn launch_solo_minmax_parallel_parameter(depth: u8) {
+    let board = Default::default();
+    let game = Configuration::new(&board);
+    MinMax(depth).compute_next_move(&game);
 }
 
 #[cfg(test)]
@@ -73,19 +79,60 @@ mod tests {
     // fn minmax_parallel_solo(b: &mut Bencher) {
     //     b.iter(|| launch_solo_minmax_parallel());
     // }
+
+    // #[bench]
+    // fn minmax_parallel_1(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_minmax_parallel_parameter(1));
+    // }
     //
     // #[bench]
-    // fn alphabeta_solo(b: &mut Bencher) {
-    //     b.iter(|| launch_solo_alpha_beta_simple());
+    // fn minmax_parallel_2(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_minmax_parallel_parameter(2));
     // }
+    //
+    // #[bench]
+    // fn minmax_parallel_3(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_minmax_parallel_parameter(3));
+    // }
+    //
+    // #[bench]
+    // fn minmax_parallel_4(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_minmax_parallel_parameter(4));
+    // }
+    //
+    // #[bench]
+    // fn alphabeta_memoization_sorted_1(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_alphabeta_sorted(1));
+    // }
+    //
+    // #[bench]
+    // fn alphabeta_memoization_sorted_2(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_alphabeta_sorted(2));
+    // }
+    //
+    // #[bench]
+    // fn alphabeta_memoization_sorted_3(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_alphabeta_sorted(3));
+    // }
+
+    // #[bench]
+    // fn alphabeta_memoization_sorted_4(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_alphabeta_sorted(4));
+    // }
+
+    #[bench]
+    fn alphabeta_solo(b: &mut Bencher) {
+        b.iter(|| launch_solo_alpha_beta_simple());
+    }
 
     #[bench]
     fn alphabeta_memoization_solo(b: &mut Bencher) {
         b.iter(|| launch_solo_alphabeta_memoization());
     }
+
     #[bench]
-    fn alphabeta_memoization_sorted(b: &mut Bencher) {
-        b.iter(|| launch_solo_alphabeta_sorted());
+    fn alphabeta_memoization_sorted_8(b: &mut Bencher) {
+        b.iter(|| launch_solo_alphabeta_sorted(8));
     }
 
 }
