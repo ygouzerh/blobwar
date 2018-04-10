@@ -13,31 +13,38 @@ use blobwar::strategy::Strategy;
 
 /// This function launch a battle
 /// between greedy and greedy on a simple map
-fn launch_battle_greedy_greedy(){
+fn launch_battle_greedy_greedy() {
     let board = Default::default();
     let mut game = Configuration::new(&board);
     game.battle_silently(Greedy(), Greedy());
 }
 
 /// Function that launch AlphaBeta on a great depth with only itself
-fn launch_solo_alpha_beta(){
+fn launch_solo_alpha_beta() {
     let board = Default::default();
     let game = Configuration::new(&board);
-    AlphaBeta(3).compute_next_move(&game);
+    AlphaBeta(8).compute_next_move(&game);
 }
 
 /// Function that launch MinMax // on a great depth with only itself
-fn launch_solo_minmax_parallel(){
+fn launch_solo_minmax_parallel() {
     let board = Default::default();
     let game = Configuration::new(&board);
     MinMax(5).compute_next_move(&game);
 }
 
 /// Function that launch MinMax sequential on a great depth with only itself
-fn launch_solo_minmax_sequential(){
+fn launch_solo_minmax_sequential() {
     let board = Default::default();
     let game = Configuration::new(&board);
     MinMax(5).compute_next_move_sequential(&game);
+}
+
+/// Function that launch AlphaBeta with memoization
+fn launch_solo_alphabeta_memoization() {
+    let board = Default::default();
+    let game = Configuration::new(&board);
+    AlphaBeta(8).compute_next_move_memoization(&game);
 }
 
 #[cfg(test)]
@@ -50,19 +57,24 @@ mod tests {
     //     b.iter(|| launch_battle_greedy_greedy());
     // }
     //
+    #[bench]
+    fn alphabeta_solo(b: &mut Bencher) {
+        b.iter(|| launch_solo_alpha_beta());
+    }
+
     // #[bench]
-    // fn alphabeta_solo(b: &mut Bencher){
-    //     b.iter(|| launch_solo_alpha_beta());
+    // fn minmax_sequential_solo(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_minmax_sequential());
+    // }
+    //
+    // #[bench]
+    // fn minmax_parallel_solo(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_minmax_parallel());
     // }
 
     #[bench]
-    fn minmax_sequential_solo(b: &mut Bencher){
-        b.iter(|| launch_solo_minmax_sequential());
-    }
-
-    #[bench]
-    fn minmax_parallel_solo(b: &mut Bencher){
-        b.iter(|| launch_solo_minmax_parallel());
+    fn alphabeta_memoization_solo(b: &mut Bencher) {
+        b.iter(|| launch_solo_alphabeta_memoization());
     }
 
 }
