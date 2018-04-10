@@ -4,6 +4,7 @@ use std::fmt;
 use super::Strategy;
 use configuration::{Configuration, Movement};
 use shmem::AtomicMove;
+use std::collections::HashMap;
 
 /// Anytime alpha beta algorithm.
 /// Any time algorithms will compute until a deadline is hit and the process is killed.
@@ -20,6 +21,15 @@ pub fn alpha_beta_anytime(state: &Configuration) {
 /// Alpha - Beta algorithm with given maximum number of recursions.
 pub struct AlphaBeta(pub u8);
 
+impl AlphaBeta {
+    /// Compute all the move but store at each node the value of the node
+    pub fn compute_next_move_memoization(&mut self, state: &Configuration) -> Option<Movement> {
+        let mut memoizer: HashMap<Movement, i8> = HashMap::new();
+        let (best_movement, _value) = alphabeta_memoization(state, self.0, -127, 127, &mut memoizer);
+        best_movement
+    }
+}
+
 impl fmt::Display for AlphaBeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Alpha - Beta (max level: {})", self.0)
@@ -28,13 +38,50 @@ impl fmt::Display for AlphaBeta {
 
 // It's like the minmax algorithm (negamax), but we keep a range of value
 // so we are able to follow only interesting paths
-// TODO : Write it in rust and parallelize it
 fn alphabeta(state: &Configuration, depth: u8, alpha: i8, mut beta: i8) -> (Option<Movement>, i8) {
     // Test if we have a movement to perform or if we aren't at the leaves
     if state.movements().next().is_some() && depth > 0 {
         let mut best_value = 127;
         let mut best_movement: Option<Movement> = None;
         for mov in state.movements() {
+            // We keep give at the opponent the contrary of our game
+            // So we invert the alpha beta
+            let (_, v_read) = alphabeta(&state.play(&mov), depth - 1, -beta, -alpha);
+            // And he give us his version of the score, so we need to inverst it
+            let value = -v_read;
+            if value < best_value {
+                best_value = value;
+                best_movement = Some(mov);
+                // If the value is better for us, we keep it
+                if best_value < beta {
+                    beta = best_value;
+                }
+                // In the case where the better value is worse than the minimum
+                // allowed, we cut this node and don't explore it
+                if value <= alpha {
+                    break;
+                }
+            }
+        }
+        return (best_movement, best_value);
+    } else {
+        // The last level return the value of th egame
+        return (None, state.value());
+    }
+}
+// It's like the minmax algorithm (negamax), but we keep a range of value
+// so we are able to follow only interesting paths
+fn alphabeta_memoization(state: &Configuration, depth: u8, alpha: i8, mut beta: i8, memoizer: &mut HashMap<Movement, i8>) -> (Option<Movement>, i8) {
+    // Test if we have a movement to perform or if we aren't at the leaves
+    if state.movements().next().is_some() && depth > 0 {
+        let mut best_value = 127;
+        let mut best_movement: Option<Movement> = None;
+        for mov in state.movements() {
+            if memoizer.contains_key(&mov) {
+                println!("We have in");
+            } else {
+                memoizer.insert(mov, 12);
+            }
             // We keep give at the opponent the contrary of our game
             // So we invert the alpha beta
             let (_, v_read) = alphabeta(&state.play(&mov), depth - 1, -beta, -alpha);
