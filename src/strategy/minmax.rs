@@ -64,13 +64,7 @@ fn minmax_parallel(state: &Configuration, depth: u8) -> (Option<Movement>, i8) {
 
 impl Strategy for MinMax {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
-        // println!(
-        //     "MINMAX me : current_player = {:?} , value = {:?}",
-        //     state.current_player,
-        //     state.value()
-        // );
         let (best_movement, _) = minmax_parallel(state, self.0);
-        // let (best_movement, _) = minmax(state, 2);
         best_movement
     }
 }
@@ -80,7 +74,13 @@ impl fmt::Display for MinMax {
         write!(f, "Min - Max (max level: {})", self.0)
     }
 }
-
+impl MinMax {
+    /// Compute each movement but in a sequential manner
+    pub fn compute_next_move_sequential(&mut self, state: &Configuration) -> Option<Movement> {
+        let (best_movement, _) = minmax(state, self.0);
+        best_movement
+    }
+}
 /// Anytime min max algorithm.
 /// Any time algorithms will compute until a deadline is hit and the process is killed.
 /// They are therefore run in another process and communicate through shared memory.
