@@ -41,12 +41,8 @@ impl Strategy for Greedy {
                     optimal_value = new_value;
                 }
             }
-            for i in history_mouvement.iter(){
-                println!(">>{:?}", i );
-            }
 
             optimal_mouvement=history_mouvement[rng.gen_range(0,history_mouvement.len())];
-            println!("Choise : {:?}", optimal_mouvement);
 
             // We return the best movement
             // return optimal_mouvement;
