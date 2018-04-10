@@ -1,21 +1,21 @@
 WinRate
-AlphaBeta1 vs Greedy	61	33	6	100
-AlphaBeta1 vs MinMax1	100	0	0	100
-AlphaBeta1 vs MinMax2	100	0	0	100
-AlphaBeta2 vs Greedy	100	0	0	100
-AlphaBeta2 vs MinMax1	100	0	0	100
-AlphaBeta2 vs MinMax2	100	0	0	100
-AlphaBeta3 vs Greedy	100	0	0	100
-AlphaBeta3 vs MinMax1	100	0	0	100
-AlphaBeta3 vs MinMax2	100	0	0	100
-AlphaBeta3 vs MinMax3	0	5	0	5
-AlphaBeta4 vs Greedy	100	0	0	100
-AlphaBeta5 vs Greedy	100	0	0	10
-Greedy vs Greedy	255	212	33	500
-MinMax1 vs Greedy	406	73	23	500
-MinMax2 vs Greedy	500	0	0	500
-MinMax3 vs Greedy	120	0	0	120
-MinMax3 vs MinMax1	25	0	0	25
-MinMax3 vs MinMax2	50	0	0	50
-MinMax3 vs MinMax3	32	0	0	32
-MinMax4 vs Greedy	3	0	0	3
+AlphaBeta1 vs Greedy	61	33	6	100	0.0051
+AlphaBeta1 vs MinMax1	100	0	0	100	0.0025
+AlphaBeta1 vs MinMax2	100	0	0	100	0.0185
+AlphaBeta2 vs Greedy	100	0	0	100	0.0161
+AlphaBeta2 vs MinMax1	100	0	0	100	0.0078
+AlphaBeta2 vs MinMax2	100	0	0	100	0.1688
+AlphaBeta3 vs Greedy	100	0	0	100	0.3939
+AlphaBeta3 vs MinMax1	100	0	0	100	0.1466
+AlphaBeta3 vs MinMax2	100	0	0	100	0.5664
+AlphaBeta3 vs MinMax3	0	5	0	5	5.2973
+AlphaBeta4 vs Greedy	100	0	0	100	1.0049
+AlphaBeta5 vs Greedy	100	0	0	10	20.4324
+Greedy vs Greedy	255	212	33	500	0.0023
+MinMax1 vs Greedy	406	73	23	500	0.0082
+MinMax2 vs Greedy	500	0	0	500	0.0686
+MinMax3 vs Greedy	120	0	0	120	3.8248
+MinMax3 vs MinMax1	25	0	0	25	0.8286
+MinMax3 vs MinMax2	50	0	0	50	6.3538
+MinMax3 vs MinMax3	32	0	0	32	9.074
+MinMax4 vs Greedy	3	0	0	3	167.31
