@@ -124,8 +124,8 @@ fn alphabeta_memoization(
 
 impl Strategy for AlphaBeta {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
-        self.compute_next_move_memoization(state)
-        // let (best_movement, _value) = alphabeta(state, self.0, -127, 127);
-        // best_movement
+        // self.compute_next_move_memoization(state)
+        let (best_movement, _value) = alphabeta(state, self.0, -127, 127);
+        best_movement
     }
 }
