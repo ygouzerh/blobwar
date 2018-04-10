@@ -128,12 +128,17 @@ impl<'a> Configuration<'a> {
     /// Play a match between the given players starting from current `Configuration`.
     pub fn battle<T: Strategy, U: Strategy>(&mut self, mut player_one: T, mut player_two: U) {
         while !self.game_over() {
+<<<<<<< HEAD
             println!(
                 "{} player's turn (he is losing by {} before playing)",
                 ["red", "blue"][self.current_player as usize],
                 self.value()
             );
             println!("{}", self);
+=======
+            //println!( "{} player's turn ({})", ["red", "blue"][self.current_player as usize], self.value() );
+            //println!("{}", self);
+>>>>>>> 2a0846954b5b2f1cd3b8df6112e4a44be7d059b7
             let play_attempt = if self.current_player {
                 player_two.compute_next_move(self)
             } else {
@@ -147,6 +152,7 @@ impl<'a> Configuration<'a> {
             }
         }
 
+<<<<<<< HEAD
         let value = self.blobs[0].len() - self.blobs[1].len();
         match value {
             x if x > 0 => println!("RED ({}) wins over BLUE ({})!", player_one, player_two),
@@ -181,6 +187,15 @@ impl<'a> Configuration<'a> {
             _ => println!("DRAW!\tDRAW\tDRAW\t{}\t{}",ends,value),
         }
         //println!("{}", self);
+=======
+        match self.value() {
+            x if x > 0 => println!("RED\tBLUE"),
+            x if x < 0 => println!("BLUE\tRED"),
+            _ => println!("DRAW!"),
+        }
+        //println!("{}", self);
+        println!("{}", self.value());
+>>>>>>> 2a0846954b5b2f1cd3b8df6112e4a44be7d059b7
     }
 
     /// Return true if no empty space remains or someone died.
