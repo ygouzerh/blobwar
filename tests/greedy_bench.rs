@@ -5,6 +5,7 @@
 extern crate blobwar;
 extern crate test;
 
+
 use blobwar::configuration::Configuration;
 use blobwar::strategy::Greedy;
 
@@ -13,7 +14,9 @@ use blobwar::strategy::Greedy;
 fn launch_battle_greedy_greedy(){
     let board = Default::default();
     let mut game = Configuration::new(&board);
+
     game.battle_silently(Greedy(), Greedy());
+
 }
 
 #[cfg(test)]

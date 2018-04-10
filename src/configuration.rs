@@ -7,6 +7,11 @@ use super::board::Board;
 use super::positions::{BoardPosition, Position, Positions};
 use super::strategy::Strategy;
 
+extern crate time;
+
+
+
+
 #[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, Eq)]
 /// Movements : clone some blob or jump
 pub enum Movement {
@@ -154,6 +159,7 @@ impl<'a> Configuration<'a> {
 
     /// Exactly the same behavior than battle, but print only the result of the match
     pub fn battle_silently<T: Strategy, U: Strategy>(&mut self, mut player_one: T, mut player_two: U) {
+        let start = time::precise_time_s();
         while !self.game_over() {
             let play_attempt = if self.current_player {
                 player_two.compute_next_move(self)
@@ -167,6 +173,14 @@ impl<'a> Configuration<'a> {
                 self.current_player = !self.current_player;
             }
         }
+        let ends = time::precise_time_s() - start ;
+        let value = self.blobs[0].len() - self.blobs[1].len();
+        match value {
+            x if x > 0 => println!("RED\t{}\twins\t{}\t{}", player_one,ends,value),
+            x if x < 0 => println!("BLUE\t{}\twins\t{}\t{}", player_two,ends,value),
+            _ => println!("DRAW!\tDRAW\tDRAW\t{}\t{}",ends,value),
+        }
+        //println!("{}", self);
     }
 
     /// Return true if no empty space remains or someone died.

@@ -17,6 +17,7 @@ serde_json="*"
 log = "*"
 rand="*"
 rayon= "1.0"
+time = "*"
 
 [target.'cfg(unix)'.dependencies]
 nix="0.6"
