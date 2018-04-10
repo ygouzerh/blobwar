@@ -24,8 +24,9 @@ pub struct AlphaBeta(pub u8);
 impl AlphaBeta {
     /// Compute all the move but store at each node the value of the node
     pub fn compute_next_move_memoization(&mut self, state: &Configuration) -> Option<Movement> {
-        let mut memoizer: HashMap<Movement, i8> = HashMap::new();
-        let (best_movement, _value) = alphabeta_memoization(state, self.0, -127, 127, &mut memoizer);
+        let mut memoizer: HashMap<String, (Movement, i8)> = HashMap::new();
+        let (best_movement, _value) =
+            alphabeta_memoization(state, self.0, -127, 127, &mut memoizer);
         best_movement
     }
 }
@@ -71,22 +72,35 @@ fn alphabeta(state: &Configuration, depth: u8, alpha: i8, mut beta: i8) -> (Opti
 }
 // It's like the minmax algorithm (negamax), but we keep a range of value
 // so we are able to follow only interesting paths
-fn alphabeta_memoization(state: &Configuration, depth: u8, alpha: i8, mut beta: i8, memoizer: &mut HashMap<Movement, i8>) -> (Option<Movement>, i8) {
+fn alphabeta_memoization(
+    state: &Configuration,
+    depth: u8,
+    alpha: i8,
+    mut beta: i8,
+    memoizer: &mut HashMap<String, (Movement, i8)>,
+) -> (Option<Movement>, i8) {
     // Test if we have a movement to perform or if we aren't at the leaves
     if state.movements().next().is_some() && depth > 0 {
         let mut best_value = 127;
         let mut best_movement: Option<Movement> = None;
         for mov in state.movements() {
-            if memoizer.contains_key(&mov) {
-                println!("We have in");
+            let value: i8;
+            if memoizer.contains_key(&state.serialize()) {
+                // let (_, v_read) = memoizer.get(&state.serialize());
+                let result = memoizer.get(&state.serialize());
+                let v_read = match result {
+                    Some(y) => y.1,
+                    None => 127,
+                };
+                value = v_read;
             } else {
-                memoizer.insert(mov, 12);
+                // We keep give at the opponent the contrary of our game
+                // So we invert the alpha beta
+                let (_, v_read) = alphabeta(&state.play(&mov), depth - 1, -beta, -alpha);
+                // And he give us his version of the score, so we need to inverst it
+                value = -v_read;
+                memoizer.insert(state.serialize(), (mov, value));
             }
-            // We keep give at the opponent the contrary of our game
-            // So we invert the alpha beta
-            let (_, v_read) = alphabeta(&state.play(&mov), depth - 1, -beta, -alpha);
-            // And he give us his version of the score, so we need to inverst it
-            let value = -v_read;
             if value < best_value {
                 best_value = value;
                 best_movement = Some(mov);
@@ -110,7 +124,8 @@ fn alphabeta_memoization(state: &Configuration, depth: u8, alpha: i8, mut beta: 
 
 impl Strategy for AlphaBeta {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
-        let (best_movement, _value) = alphabeta(state, self.0, -127, 127);
-        best_movement
+        self.compute_next_move_memoization(state)
+        // let (best_movement, _value) = alphabeta(state, self.0, -127, 127);
+        // best_movement
     }
 }
