@@ -64,15 +64,11 @@ fn minmax_parallel(state: &Configuration, depth: u8) -> (Option<Movement>, i8) {
 
 impl Strategy for MinMax {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
-<<<<<<< HEAD
         // println!(
         //     "MINMAX me : current_player = {:?} , value = {:?}",
         //     state.current_player,
         //     state.value()
         // );
-=======
-        //println!("MINMAX me : current_player = {:?} , value = {:?}",state.current_player, state.value()   );
->>>>>>> 2a0846954b5b2f1cd3b8df6112e4a44be7d059b7
         let (best_movement, _) = minmax_parallel(state, self.0);
         // let (best_movement, _) = minmax(state, 2);
         best_movement
