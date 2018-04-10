@@ -22,7 +22,7 @@ pub struct AlphaBeta(pub u8);
 
 impl fmt::Display for AlphaBeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Alpha - Beta (max level: {})", self.0)
+        write!(f, "AlphBet:{}", self.0)
     }
 }
 

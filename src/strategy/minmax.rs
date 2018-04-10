@@ -70,14 +70,14 @@ impl Strategy for MinMax {
         //     state.value()
         // );
         let (best_movement, _) = minmax_parallel(state, self.0);
-        // let (best_movement, _) = minmax(state, 2);
+        //let (best_movement, _) = minmax(state, self.0);
         best_movement
     }
 }
 
 impl fmt::Display for MinMax {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Min - Max (max level: {})", self.0)
+        write!(f, "MinMax:{}", self.0)
     }
 }
 
