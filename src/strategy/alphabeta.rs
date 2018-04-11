@@ -221,7 +221,7 @@ fn negascout(
         let mut moves_sorted: Vec<_> = state.movements().collect::<Vec<_>>();
         moves_sorted.sort_by_key(|m| -state.play(m).value());
         for (i, mov) in moves_sorted.into_iter().enumerate() {
-            let value: i8;
+            let mut value: i8;
             let serializing_state: String = state.serialize();
             if memoizer.contains_key(&serializing_state) {
                 let result = memoizer.get(&serializing_state);
@@ -232,16 +232,23 @@ fn negascout(
                 value = v_read;
             } else {
                 if i == 0 {
-                    let (_, v_read) = alphabeta(&state.play(&mov), depth - 1, -beta, -alpha);
+                    let (_, v_read) = negascout(&state.play(&mov), depth - 1, -beta, -alpha, memoizer);
                     // And he give us his version of the score, so we need to inverst it
-                    // value = -v_read;
+                    value = -v_read;
                     // // TODO
+                } else {
+                    // We keep give at the opponent the contrary of our game
+                    // So we invert the alpha beta
+                    let (_, v_read) = negascout(&state.play(&mov), depth - 1, -alpha - 1, -alpha, memoizer);
+                    // And he give us his version of the score, so we need to inverst it
+                    value = -v_read;
+                    if alpha < value && value < beta {
+                        let (_, v_read_again) = negascout(&state.play(&mov), depth - 1, -beta, -value, memoizer);
+                        // And he give us his version of the score, so we need to inverst it
+                        value = -v_read_again;
+                    }
+
                 }
-                // We keep give at the opponent the contrary of our game
-                // So we invert the alpha beta
-                let (_, v_read) = alphabeta(&state.play(&mov), depth - 1, -beta, -alpha);
-                // And he give us his version of the score, so we need to inverst it
-                value = -v_read;
                 memoizer.insert(state.serialize(), (mov, value));
             }
             if value < best_value {
@@ -268,6 +275,6 @@ fn negascout(
 impl Strategy for AlphaBeta {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
         // self.compute_next_move_memoization(state)
-        self.compute_next_move_sorted(state)
+        self.compute_next_move_negascout(state)
     }
 }
