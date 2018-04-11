@@ -321,9 +321,9 @@ fn negascout(
 
 impl Strategy for AlphaBeta {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
-         self.compute_next_move_memoization(state)
+         //self.compute_next_move_memoization(state)
          //self.compute_next_move_negascout(state)
-         //self.compute_next_move_simple(state)
+         self.compute_next_move_simple(state)
          //self.compute_next_move_sorted(state)
         //self.compute_next_move_full(state)
     }

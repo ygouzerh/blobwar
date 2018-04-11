@@ -10,12 +10,20 @@ use blobwar::strategy::{AlphaBeta, Greedy, Human, IterativeDeepening, IterativeS
 fn main() {
 	//let board = Board::load("x").expect("failed loading board");
 
+    if false{
+    println!("Greedy vs Greedy");
+    for i in (0..500){
+        let board = Default::default();
+        let mut game = Configuration::new(&board);
+        game.battle_silently(Greedy(), Greedy());
+        }
+    }
 
 	//Greedy vs MinMax
 	if false{
-		for j in (1..5){
+		for j in (1..4){
 			println!("Greedy vs MinMax{}",j);
-			for i in (0..25){
+			for i in (0..100){
 				let board = Default::default();
 				let mut game = Configuration::new(&board);
 				game.battle_silently(Greedy(), MinMax(j));
@@ -38,9 +46,9 @@ fn main() {
     }
 	//Alphabeta vs Greedy
 	if true{
-		for j in (1..17){
-		println!("ABmemo{} vs Greedy",j);
-		for i in (0..25){
+		for j in (1..11){
+		println!("AlpB{} vs Greedy",j);
+		for i in (0..100){
 			let board = Default::default();
 			let mut game = Configuration::new(&board);
 			game.battle_silently(AlphaBeta(j), Greedy());
