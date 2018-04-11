@@ -40,6 +40,13 @@ fn launch_solo_alphabeta_sorted(depth: u8) {
     AlphaBeta(depth).compute_next_move_sorted(&game);
 }
 
+/// Function that launch AlphaBeta with negascout
+fn launch_solo_negascout(depth: u8) {
+    let board = Default::default();
+    let game = Configuration::new(&board);
+    AlphaBeta(depth).compute_next_move_negascout(&game);
+}
+
 /// Function that launch MinMax // on a great depth with only itself
 fn launch_solo_minmax_parallel() {
     let board = Default::default();
@@ -120,19 +127,24 @@ mod tests {
     //     b.iter(|| launch_solo_alphabeta_sorted(4));
     // }
 
-    #[bench]
-    fn alphabeta_solo(b: &mut Bencher) {
-        b.iter(|| launch_solo_alpha_beta_simple());
-    }
+    // #[bench]
+    // fn alphabeta_solo(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_alpha_beta_simple());
+    // }
+
+    // #[bench]
+    // fn alphabeta_memoization_solo(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_alphabeta_memoization());
+    // }
 
     #[bench]
-    fn alphabeta_memoization_solo(b: &mut Bencher) {
-        b.iter(|| launch_solo_alphabeta_memoization());
+    fn negascout(b: &mut Bencher) {
+        b.iter(|| launch_solo_negascout(10));
     }
 
     #[bench]
     fn alphabeta_memoization_sorted_8(b: &mut Bencher) {
-        b.iter(|| launch_solo_alphabeta_sorted(8));
+        b.iter(|| launch_solo_alphabeta_sorted(10));
     }
 
 }
