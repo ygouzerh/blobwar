@@ -118,7 +118,8 @@ fn alphabeta_memoization(
             } else {
                 // We keep give at the opponent the contrary of our game
                 // So we invert the alpha beta
-                let (_, v_read) = alphabeta_memoization(&state.play(&mov), depth - 1, -beta, -alpha, memoizer);
+                let (_, v_read) =
+                    alphabeta_memoization(&state.play(&mov), depth - 1, -beta, -alpha, memoizer);
                 // And he give us his version of the score, so we need to inverst it
                 value = -v_read;
                 memoizer.insert(state.serialize(), (mov, value));
@@ -176,7 +177,8 @@ fn alphabeta_sorted(
             } else {
                 // We keep give at the opponent the contrary of our game
                 // So we invert the alpha beta
-                let (_, v_read) = alphabeta_sorted(&state.play(&mov), depth - 1, -beta, -alpha, memoizer);
+                let (_, v_read) =
+                    alphabeta_sorted(&state.play(&mov), depth - 1, -beta, -alpha, memoizer);
                 // And he give us his version of the score, so we need to inverst it
                 value = -v_read;
                 memoizer.insert(state.serialize(), (mov, value));
@@ -232,22 +234,26 @@ fn negascout(
                 value = v_read;
             } else {
                 if i == 0 {
-                    let (_, v_read) = negascout(&state.play(&mov), depth - 1, -beta, -alpha, memoizer);
+                    let (_, v_read) =
+                        negascout(&state.play(&mov), depth - 1, -beta, -alpha, memoizer);
                     // And he give us his version of the score, so we need to inverst it
                     value = -v_read;
-                    // // TODO
+                // // TODO
                 } else {
                     // We keep give at the opponent the contrary of our game
                     // So we invert the alpha beta
-                    let (_, v_read) = negascout(&state.play(&mov), depth - 1, -alpha - 1, -alpha, memoizer);
+                    let (_, v_read) =
+                        negascout(&state.play(&mov), depth - 1, -alpha, -alpha - 1, memoizer);
                     // And he give us his version of the score, so we need to inverst it
                     value = -v_read;
                     if alpha < value && value < beta {
-                        let (_, v_read_again) = negascout(&state.play(&mov), depth - 1, -beta, -value, memoizer);
+                        let (_, v_read_again) =
+                            negascout(&state.play(&mov), depth - 1, -value, -alpha, memoizer);
                         // And he give us his version of the score, so we need to inverst it
                         value = -v_read_again;
+                    } else {
+                        println!("It's good ");
                     }
-
                 }
                 memoizer.insert(state.serialize(), (mov, value));
             }
@@ -275,6 +281,6 @@ fn negascout(
 impl Strategy for AlphaBeta {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
         // self.compute_next_move_memoization(state)
-        self.compute_next_move_negascout(state)
+        self.compute_next_move_memoization(state)
     }
 }
