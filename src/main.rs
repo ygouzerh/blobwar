@@ -7,6 +7,10 @@ fn main() {
     //let board = Board::load("x").expect("failed loading board");
     let board = Default::default();
     let mut game = Configuration::new(&board);
-    game.battle(AlphaBeta(3), Greedy());
-    // game.battle_silently(AlphaBeta(3), Greedy());
+    game.battle(
+        IterativeDeepening::new(IterativeStrategy::AlphaBeta),
+        IterativeDeepening::new(IterativeStrategy::AlphaBeta),
+    );
+    // game.battle(AlphaBeta(8), Greedy());
+    // game.battle_silently(AlphaBeta(8), Greedy());
 }

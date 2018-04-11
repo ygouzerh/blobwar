@@ -127,20 +127,20 @@ mod tests {
     //     b.iter(|| launch_solo_alphabeta_sorted(4));
     // }
 
-    // #[bench]
-    // fn alphabeta_solo(b: &mut Bencher) {
-    //     b.iter(|| launch_solo_alpha_beta_simple());
-    // }
-
-    // #[bench]
-    // fn alphabeta_memoization_solo(b: &mut Bencher) {
-    //     b.iter(|| launch_solo_alphabeta_memoization());
-    // }
+    #[bench]
+    fn alphabeta_solo(b: &mut Bencher) {
+        b.iter(|| launch_solo_alpha_beta_simple());
+    }
 
     #[bench]
-    fn negascout(b: &mut Bencher) {
-        b.iter(|| launch_solo_negascout(10));
+    fn alphabeta_memoization_solo(b: &mut Bencher) {
+        b.iter(|| launch_solo_alphabeta_memoization());
     }
+
+    // #[bench]
+    // fn negascout(b: &mut Bencher) {
+    //     b.iter(|| launch_solo_negascout(10));
+    // }
 
     #[bench]
     fn alphabeta_memoization_sorted_8(b: &mut Bencher) {
