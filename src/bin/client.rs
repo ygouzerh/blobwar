@@ -13,7 +13,7 @@ use std::io::Write;
 
 fn main() {
     let address = args().nth(1).expect("missing machine name or IP address");
-    let mut strategy = IterativeDeepening::new(IterativeStrategy::MinMax);
+    let mut strategy = IterativeDeepening::new(IterativeStrategy::AlphaBeta);
     let mut sending =
         TcpStream::connect((address.as_str(), 12_345)).expect("failed connecting to server");
     sending.set_nodelay(true).expect("failed setting no delay");
