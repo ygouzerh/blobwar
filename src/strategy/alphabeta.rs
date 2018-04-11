@@ -39,7 +39,6 @@ impl AlphaBeta {
 
     /// Compute all the moves but use the simple algorithm
     pub fn compute_next_move_simple(&mut self, state: &Configuration) -> Option<Movement> {
-        // self.compute_next_move_memoization(state)
         let (best_movement, _value) = alphabeta(state, self.0, -127, 127);
         best_movement
     }
@@ -280,7 +279,6 @@ fn negascout(
 
 impl Strategy for AlphaBeta {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
-        // self.compute_next_move_memoization(state)
         self.compute_next_move_memoization(state)
     }
 }
