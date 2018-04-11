@@ -10,7 +10,7 @@ use blobwar::strategy::{AlphaBeta, Greedy, Human, IterativeDeepening, IterativeS
 fn main() {
     //let board = Board::load("x").expect("failed loading board");
     for j in (1..11){
-    println!("compute_next_move_memoization{}",j);
+    println!("negascout{}",j);
     for i in (1..25){
         let board = Default::default();
         let mut game = Configuration::new(&board);
