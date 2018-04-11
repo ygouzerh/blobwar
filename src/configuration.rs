@@ -7,16 +7,14 @@ use super::board::Board;
 use super::positions::{BoardPosition, Position, Positions};
 use super::strategy::Strategy;
 
-<<<<<<< HEAD
-#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, Eq, Hash)]
-=======
+
 extern crate time;
 
 
 
 
-#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, Eq)]
->>>>>>> 7bfd43ebe415c62b358313fb85eeeb215185b9e5
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, Eq, Hash)]
+
 /// Movements : clone some blob or jump
 pub enum Movement {
     /// For copy we just need the destination

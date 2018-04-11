@@ -197,7 +197,7 @@ fn alphabeta_sorted(
 
 impl Strategy for AlphaBeta {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
-        // self.compute_next_move_memoization(state)
-        self.compute_next_move_sorted(state)
+         self.compute_next_move_memoization(state)
+        //self.compute_next_move_sorted(state)
     }
 }
