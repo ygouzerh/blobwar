@@ -43,6 +43,13 @@ impl AlphaBeta {
         let (best_movement, _value) = alphabeta(state, self.0, -127, 127);
         best_movement
     }
+
+    /// Compute all the moves but use negascout
+    pub fn compute_next_move_negascout(&mut self, state: &Configuration) -> Option<Movement> {
+        let mut memoizer: HashMap<String, (Movement, i8)> = HashMap::new();
+        let (best_movement, _value) = negascout(state, self.0, -127, 127, &mut memoizer);
+        best_movement
+    }
 }
 
 impl fmt::Display for AlphaBeta {
@@ -111,7 +118,7 @@ fn alphabeta_memoization(
             } else {
                 // We keep give at the opponent the contrary of our game
                 // So we invert the alpha beta
-                let (_, v_read) = alphabeta(&state.play(&mov), depth - 1, -beta, -alpha);
+                let (_, v_read) = alphabeta_memoization(&state.play(&mov), depth - 1, -beta, -alpha, memoizer);
                 // And he give us his version of the score, so we need to inverst it
                 value = -v_read;
                 memoizer.insert(state.serialize(), (mov, value));
@@ -167,6 +174,69 @@ fn alphabeta_sorted(
                 };
                 value = v_read;
             } else {
+                // We keep give at the opponent the contrary of our game
+                // So we invert the alpha beta
+                let (_, v_read) = alphabeta_sorted(&state.play(&mov), depth - 1, -beta, -alpha, memoizer);
+                // And he give us his version of the score, so we need to inverst it
+                value = -v_read;
+                memoizer.insert(state.serialize(), (mov, value));
+            }
+            if value < best_value {
+                best_value = value;
+                best_movement = Some(mov);
+                // If the value is better for us, we keep it
+                if best_value < beta {
+                    beta = best_value;
+                }
+                // In the case where the better value is worse than the minimum
+                // allowed, we cut this node and don't explore it
+                if value <= alpha {
+                    break;
+                }
+            }
+        }
+        return (best_movement, best_value);
+    } else {
+        // The last level return the value of th egame
+        return (None, state.value());
+    }
+}
+
+//Negascout algorithm with memoization and sort
+fn negascout(
+    state: &Configuration,
+    depth: u8,
+    alpha: i8,
+    mut beta: i8,
+    memoizer: &mut HashMap<String, (Movement, i8)>,
+) -> (Option<Movement>, i8) {
+    // Test if we have a movement to perform or if we aren't at the leaves
+    if state.movements().next().is_some() && depth > 0 {
+        let mut best_value = 127;
+        let mut best_movement: Option<Movement> = None;
+        // We sort the movements by the value of the game.
+        // So we have a best chance to have the best moves before
+        // We want the minimum value, so we took the minimum first
+        // So we sort by taking the minimum first
+        let mut moves_sorted: Vec<_> = state.movements().collect::<Vec<_>>();
+        moves_sorted.sort_by_key(|m| -state.play(m).value());
+        for (i, mov) in moves_sorted.into_iter().enumerate() {
+            let value: i8;
+            let serializing_state: String = state.serialize();
+            if memoizer.contains_key(&serializing_state) {
+                let result = memoizer.get(&serializing_state);
+                let v_read = match result {
+                    Some(y) => y.1,
+                    None => 127,
+                };
+                value = v_read;
+            } else {
+                if i == 0 {
+                    let (_, v_read) = alphabeta(&state.play(&mov), depth - 1, -beta, -alpha);
+                    // And he give us his version of the score, so we need to inverst it
+                    // value = -v_read;
+                    // // TODO
+                }
                 // We keep give at the opponent the contrary of our game
                 // So we invert the alpha beta
                 let (_, v_read) = alphabeta(&state.play(&mov), depth - 1, -beta, -alpha);
